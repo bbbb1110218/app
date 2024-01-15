@@ -1,4 +1,7 @@
 *.out
 *.bak
 *.mac.bak
-bin/
+doc/
+include/
+libstatic/
+pic/
