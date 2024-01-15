@@ -36,8 +36,12 @@ endfunction()
 # 显示列表
 
 if(QT)
-	set(CMAKE_PREFIX_PATH "")
-	list(APPEND CMAKE_PREFIX_PATH "/Users/min122218/Qt/6.2.4/macos/lib/cmake/Qt6;/Users/min122218/Qt")
+    set(CMAKE_PREFIX_PATH "")
+    if(LINUX)
+	    list(APPEND CMAKE_PREFIX_PATH :"$ENV{HOME}/Qt/6.2.4/macos/lib/cmake/Qt6;$ENV{HOME}/Qt")
+    elseif(APPLE)
+    elseif(WIN32)
+    endif()
 endif()
 
 
