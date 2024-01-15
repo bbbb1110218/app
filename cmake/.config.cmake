@@ -67,7 +67,7 @@ set(CMAKE_INSTALL_PREFIX "${HOME}/app")
 set(GEN10 1 CACHE BOOL "gen10")
 
 LINESTART()
-message(STATUS ".config.cmake be included")
+message(STATUS "$ENV{HOME}/app/cmake/.config.cmake be included")
 message(STATUS "CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}")
 LINEEND()
 
