@@ -1,0 +1,44 @@
+test(){
+	echo "hello,just testing"
+}
+
+
+# deepin
+deepline () {
+	local command
+	local str
+	if [[ $# -gt 0 ]]
+
+
+	then
+		command="deepe" 
+		str="中文翻译成英语," 
+	else
+		command="deep" 
+		str="英语翻译成中文," 
+	fi
+	echo "$(echo $str)Enter your inputs (type 'exit' to quit):"
+	while IFS= read -r line
+	do
+		if [[ "$line" == "exit" ]]
+		then
+			break
+		fi
+		if [[ "$line" == "clear" ]]
+		then
+			clear
+			continue
+		fi
+		if [[ $line == *" say" ]]
+		then
+			say "$line"
+			continue
+		fi
+		while [[ $line == [[:space:]]* ]]
+		do
+			line=${line:1} 
+		done
+		$command "$line"
+		echo "-"
+	done
+}
