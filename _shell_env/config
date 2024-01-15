@@ -1,5 +1,5 @@
-test(){
-	echo "hello,just testing"
+JEST(){
+	echo "hello,just testing1"
 }
 
 
@@ -41,4 +41,77 @@ deepline () {
 		$command "$line"
 		echo "-"
 	done
+}
+
+deepman() {
+    if [[ $# -eq 0 ]]; then
+        echo "Usage: deepman <需要翻译成文件的man帮助>"
+        return
+    fi
+
+    local inputFile="$1.En"
+    local outputFile="$1.Ch"
+    local transDir="$HOME/app/trans-doc"
+
+    if [[ -f "$transDir/$outputFile" ]]; then
+        echo "File exists in $transDir/$outputFile"
+        return
+    fi
+
+    man $1 | col -bx | sed '$!s/\n/REPLACEME/g' | sed 's/REPLACEME/\n/g; $!s/\n//' > "$inputFile"
+    local response=$(curl -s -X POST 'https://api-free.deepl.com/v2/translate' \
+        --header 'Authorization: DeepL-Auth-Key e8ad9dbd-17a0-9e73-615b-1acac4947e08:fx' \
+        --data-urlencode "text=@$inputFile" \
+        --data-urlencode 'target_lang=ZH' | python3 -c "import sys, json; print(json.load(sys.stdin)['translations'][0]['text'])")
+
+    echo "$response" > "$outputFile"
+    cp "$inputFile" "$outputFile" "$transDir/"
+
+    echo "翻译完成"
+}
+
+
+# deepman () {
+# 	if [[ $# -eq 0 ]];then
+# 		echo "Usage: deepman <需要翻译成文件的man帮助>"
+		
+# 		return ;
+# 	fi
+# 	local inputFile="$1.En" 
+# 	local outputFile="$1.Ch" 
+	
+# 	if [ -f "$(pwd)/$outputFile" ]; then 
+# 		echo "File exists in ~/$outputFile"
+# 		return ;
+# 	fi
+
+# 	if [ -f "$HOME/app/trans-doc/$outputFile" ] ; then 
+# 		echo "File exists in $HOME/app/trans-doc/$inputFile"
+# 		echo "File exists in $HOME/app/trans-doc/$outputFile"
+
+# 		return ;
+# 	fi 
+
+
+# 	local args=$(man $1 | col -bx | sed '$!s/\n/REPLACEME/g' | sed 's/REPLACEME/\n/g; $!s/\n//') 
+# 	echo "$args" > "$inputFile"
+# 	local response=$(curl -s -X POST 'https://api-free.deepl.com/v2/translate' \
+#         --header 'Authorization: DeepL-Auth-Key e8ad9dbd-17a0-9e73-615b-1acac4947e08:fx' \
+#         --data-urlencode "text=$args" \
+#         --data-urlencode 'target_lang=ZH' | python3 -c "import sys, json; print(json.load(sys.stdin)['translations'][0]['text'])") 
+# 	if [ ! -f "$HOME/app/trans-doc/$outputFile" ];then 
+# 		cp $inputFile  "$HOME/app/trans-doc/"
+# 	fi
+
+# 	if [ ! -f "$HOME/app/trans-doc/$outputFile" ];then 
+# 		cp $outputFile  "$HOME/app/trans-doc/"
+# 	fi
+	
+# 	echo "$response" > "$outputFile"
+# 	echo "翻译完成"
+
+# }
+
+transdir(){
+	cd $HOME/app/trans-doc
 }
